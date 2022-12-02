@@ -1,3 +1,4 @@
+import { EOL } from "node:os";
 import { readFile } from "node:fs/promises";
 
 import * as A from "fp-ts/Array";
@@ -28,7 +29,7 @@ const getMostCalorific = flow(
 async function run() {
   pipe(
     await getInput(),
-    E.map((input) => input.split("\n")),
+    E.map((input) => input.split(EOL)),
     E.map(getMostCalorific),
     E.getOrElse(() => 0),
     console.log

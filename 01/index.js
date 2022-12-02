@@ -36,6 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
+var node_os_1 = require("node:os");
 var promises_1 = require("node:fs/promises");
 var A = require("fp-ts/Array");
 var TE = require("fp-ts/TaskEither");
@@ -58,7 +59,7 @@ function run() {
                     _a = function_1.pipe;
                     return [4 /*yield*/, getInput()];
                 case 1:
-                    _a.apply(void 0, [_b.sent(), E.map(function (input) { return input.split("\n"); }),
+                    _a.apply(void 0, [_b.sent(), E.map(function (input) { return input.split(node_os_1.EOL); }),
                         E.map(getMostCalorific),
                         E.getOrElse(function () { return 0; }),
                         console.log]);
