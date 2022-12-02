@@ -44,13 +44,16 @@ var E = require("fp-ts/Either");
 var N = require("fp-ts/number");
 var O = require("fp-ts/Option");
 var function_1 = require("fp-ts/function");
+// Shared:
 var getInput = TE.tryCatch(function () { return (0, promises_1.readFile)("./input", "utf-8"); }, function (e) { return e; });
 var isNotEmpty = function (s) { return s !== ""; };
-var getMostCalorific = (0, function_1.flow)(A.chop(function (xs) {
+var sumAndSort = (0, function_1.flow)(A.chop(function (xs) {
     var _a = A.spanLeft(isNotEmpty)(xs), init = _a.init, rest = _a.rest;
     return [init, A.dropLeft(1)(rest)];
-}), A.map(A.reduce(0, function (acc, cur) { return acc + parseInt(cur); })), A.sort(N.Ord), A.last, O.getOrElse(function () { return 0; }));
-function run() {
+}), A.map(A.reduce(0, function (acc, cur) { return acc + parseInt(cur); })), A.sort(N.Ord));
+var getMostCalorific = (0, function_1.flow)(sumAndSort, A.last, O.getOrElse(function () { return 0; }));
+// P1:
+function p1() {
     return __awaiter(this, void 0, void 0, function () {
         var _a;
         return __generator(this, function (_b) {
@@ -58,11 +61,46 @@ function run() {
                 case 0:
                     _a = function_1.pipe;
                     return [4 /*yield*/, getInput()];
-                case 1:
-                    _a.apply(void 0, [_b.sent(), E.map(function (input) { return input.split(node_os_1.EOL); }),
+                case 1: return [2 /*return*/, _a.apply(void 0, [_b.sent(), E.map(function (input) { return input.split(node_os_1.EOL); }),
                         E.map(getMostCalorific),
-                        E.getOrElse(function () { return 0; }),
-                        console.log]);
+                        E.getOrElse(function () { return 0; })])];
+            }
+        });
+    });
+}
+var getTopThreeCalorEs = (0, function_1.flow)(sumAndSort, A.takeRight(3), A.reduce(0, function (acc, cur) { return acc + cur; }));
+// P2:
+function p2() {
+    return __awaiter(this, void 0, void 0, function () {
+        var _a;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    _a = function_1.pipe;
+                    return [4 /*yield*/, getInput()];
+                case 1: return [2 /*return*/, _a.apply(void 0, [_b.sent(), E.map(function (input) { return input.split(node_os_1.EOL); }),
+                        E.map(getTopThreeCalorEs),
+                        E.getOrElse(function () { return 0; })])];
+            }
+        });
+    });
+}
+function run() {
+    return __awaiter(this, void 0, void 0, function () {
+        var _a, _b, _c, _d, _e, _f;
+        return __generator(this, function (_g) {
+            switch (_g.label) {
+                case 0:
+                    _b = (_a = console).log;
+                    _c = ["Most Calories:"];
+                    return [4 /*yield*/, p1()];
+                case 1:
+                    _b.apply(_a, _c.concat([_g.sent()]));
+                    _e = (_d = console).log;
+                    _f = ["Top 3 Combined:"];
+                    return [4 /*yield*/, p2()];
+                case 2:
+                    _e.apply(_d, _f.concat([_g.sent()]));
                     return [2 /*return*/];
             }
         });
