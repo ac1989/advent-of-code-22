@@ -35,30 +35,41 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
 exports.__esModule = true;
 var node_os_1 = require("node:os");
 var promises_1 = require("node:fs/promises");
 var A = require("fp-ts/Array");
 var E = require("fp-ts/Either");
+var M = require("fp-ts/Monoid");
+var N = require("fp-ts/number");
 var S = require("fp-ts/string");
 var TE = require("fp-ts/TaskEither");
 var function_1 = require("fp-ts/function");
+// SHARED:
 var alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 var getInput = TE.tryCatch(function () { return (0, promises_1.readFile)("./input", "utf-8"); }, function (e) { return e; });
 var splitByNewline = function (input) { return input.split(node_os_1.EOL); };
+var charToValue = function (c) {
+    return alphabet.indexOf(c) + 1;
+};
+var sum = M.concatAll(N.MonoidSum);
+// P1
 var bisectItem = function (item) {
     var asArray = item.split("");
     return A.chunksOf(asArray.length / 2)(asArray);
 };
-var charToValue = function (c) {
-    return alphabet.indexOf(c) + 1;
-};
-var sumArray = A.reduce(0, function (acc, cur) { return acc + cur; });
-var calculateP1 = (0, function_1.flow)(bisectItem, function (item) {
+var getValuesP1 = (0, function_1.flow)(bisectItem, function (item) {
     return (0, function_1.pipe)(A.intersection(S.Eq)(item[0])(item[1]), A.uniq(S.Eq), function (x) { return x[0]; }, charToValue);
 });
-// const diff = A.intersection(S.Eq)(item[0])(item[1]);
-// return A.uniq(S.Eq)(diff); // learn traversal or smthn
 var p1 = function () { return __awaiter(void 0, void 0, void 0, function () {
     var _a;
     return __generator(this, function (_b) {
@@ -66,21 +77,50 @@ var p1 = function () { return __awaiter(void 0, void 0, void 0, function () {
             case 0:
                 _a = function_1.pipe;
                 return [4 /*yield*/, getInput()];
-            case 1: return [2 /*return*/, _a.apply(void 0, [_b.sent(), E.map((0, function_1.flow)(splitByNewline, A.map(calculateP1), sumArray)),
+            case 1: return [2 /*return*/, _a.apply(void 0, [_b.sent(), E.map((0, function_1.flow)(splitByNewline, A.map(getValuesP1), sum)),
+                    E.getOrElseW(function () { return "Failed to load file..."; })])];
+        }
+    });
+}); };
+// P2
+var intersectRec = function (xs) {
+    switch (xs.length > 1) {
+        case true:
+            return intersectRec(__spreadArray([
+                A.intersection(S.Eq)(xs[0])(xs[1])
+            ], A.dropLeft(2)(xs), true));
+        default:
+            return xs[0];
+    }
+};
+var getValuesP2 = (0, function_1.flow)(A.map(function (x) { return x.split(""); }), intersectRec, A.uniq(S.Eq), function (x) { return x[0]; }, charToValue);
+var p2 = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var _a;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                _a = function_1.pipe;
+                return [4 /*yield*/, getInput()];
+            case 1: return [2 /*return*/, _a.apply(void 0, [_b.sent(), E.map((0, function_1.flow)(splitByNewline, A.chunksOf(3), A.map(getValuesP2), sum)),
                     E.getOrElseW(function () { return "Failed to load file..."; })])];
         }
     });
 }); };
 var run = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, _b, _c;
-    return __generator(this, function (_d) {
-        switch (_d.label) {
+    var _a, _b, _c, _d, _e, _f;
+    return __generator(this, function (_g) {
+        switch (_g.label) {
             case 0:
                 _b = (_a = console).log;
                 _c = ["P1"];
                 return [4 /*yield*/, p1()];
             case 1:
-                _b.apply(_a, _c.concat([_d.sent()]));
+                _b.apply(_a, _c.concat([_g.sent()]));
+                _e = (_d = console).log;
+                _f = ["P2"];
+                return [4 /*yield*/, p2()];
+            case 2:
+                _e.apply(_d, _f.concat([_g.sent()]));
                 return [2 /*return*/];
         }
     });
