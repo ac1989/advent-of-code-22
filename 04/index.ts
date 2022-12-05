@@ -32,13 +32,15 @@ const isIntersect = (pairs: number[][]) =>
   A.intersection(N.Eq)(pairs[0])(pairs[1]).length > 0;
 
 const countFullIntersect = flow(
-  A.map(flow(toPairs, A.map(toRange), isFullIntersect)),
-  A.reduce(0, (acc: number, cur: boolean) => (cur ? acc + 1 : acc))
+  A.map(flow(toPairs, A.map(toRange))),
+  A.filter(isFullIntersect),
+  (xs) => xs.length
 );
 
 const countIsIntersect = flow(
-  A.map(flow(toPairs, A.map(toRange), isIntersect)),
-  A.reduce(0, (acc: number, cur: boolean) => (cur ? acc + 1 : acc))
+  A.map(flow(toPairs, A.map(toRange))),
+  A.filter(isIntersect),
+  (xs) => xs.length
 );
 
 async function p1() {

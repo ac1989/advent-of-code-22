@@ -59,8 +59,8 @@ var isFullIntersect = function (pairs) {
 var isIntersect = function (pairs) {
     return A.intersection(N.Eq)(pairs[0])(pairs[1]).length > 0;
 };
-var countFullIntersect = (0, function_1.flow)(A.map((0, function_1.flow)(toPairs, A.map(toRange), isFullIntersect)), A.reduce(0, function (acc, cur) { return (cur ? acc + 1 : acc); }));
-var countIsIntersect = (0, function_1.flow)(A.map((0, function_1.flow)(toPairs, A.map(toRange), isIntersect)), A.reduce(0, function (acc, cur) { return (cur ? acc + 1 : acc); }));
+var countFullIntersect = (0, function_1.flow)(A.map((0, function_1.flow)(toPairs, A.map(toRange))), A.filter(isFullIntersect), function (xs) { return xs.length; });
+var countIsIntersect = (0, function_1.flow)(A.map((0, function_1.flow)(toPairs, A.map(toRange))), A.filter(isIntersect), function (xs) { return xs.length; });
 function p1() {
     return __awaiter(this, void 0, void 0, function () {
         var _a;
