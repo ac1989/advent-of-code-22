@@ -15,9 +15,7 @@ const isMarker = (input: string[], len: number) =>
   A.uniq(S.Eq)(input).length === len;
 
 const locateMarkerRec = (input: string[], i: number, len: number): number => {
-  if (A.isEmpty(input)) return i + len;
   if (isMarker(input.slice(i, i + len), len)) return i + len;
-
   return locateMarkerRec(input, i + 1, len);
 };
 
