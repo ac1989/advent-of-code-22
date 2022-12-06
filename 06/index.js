@@ -47,8 +47,6 @@ var isMarker = function (input, len) {
     return A.uniq(S.Eq)(input).length === len;
 };
 var locateMarkerRec = function (input, i, len) {
-    if (A.isEmpty(input))
-        return i + len;
     if (isMarker(input.slice(i, i + len), len))
         return i + len;
     return locateMarkerRec(input, i + 1, len);
